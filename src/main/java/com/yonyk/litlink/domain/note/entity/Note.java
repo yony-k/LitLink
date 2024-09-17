@@ -7,8 +7,6 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.util.List;
-
 @Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
