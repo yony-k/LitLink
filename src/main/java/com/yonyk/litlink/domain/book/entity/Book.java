@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class Book {
   @Id
   private long bookId;
-
   private String title;
   private String link;
   private String image;
