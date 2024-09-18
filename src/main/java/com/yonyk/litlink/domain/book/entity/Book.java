@@ -1,8 +1,6 @@
 package com.yonyk.litlink.domain.book.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,6 +14,7 @@ import java.time.LocalDateTime;
 @Table(name = "book")
 public class Book {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long bookId;
   private String title;
   private String link;

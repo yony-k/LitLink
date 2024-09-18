@@ -1,10 +1,8 @@
 package com.yonyk.litlink.domain.member.entity;
 
+import com.yonyk.litlink.domain.member.entity.enums.MemberRole;
 import com.yonyk.litlink.global.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -20,11 +18,24 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "member")
 public class Member extends BaseEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long memberId;
+
+  private String authId;
 
   @Column(nullable = false)
   private String memberName;
   
   @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
+  private String imageUrl;
+
+  @Column(nullable = false)
+  private String provider;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private MemberRole memberRole;
 }
