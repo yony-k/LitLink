@@ -19,6 +19,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "bookmark")
 public class BookMark extends BaseEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long bookmarkId;
 
   @ManyToOne(fetch = FetchType.LAZY)

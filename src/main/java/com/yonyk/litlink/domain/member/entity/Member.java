@@ -18,13 +18,19 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "member")
 public class Member extends BaseEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long memberId;
+
+  private String authId;
 
   @Column(nullable = false)
   private String memberName;
   
   @Column(nullable = false)
   private String email;
+
+  @Column(nullable = false)
+  private String imageUrl;
 
   @Column(nullable = false)
   private String provider;

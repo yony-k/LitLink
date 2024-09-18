@@ -16,6 +16,10 @@ public enum SecurityExceptionType implements ExceptionType {
   INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "아이디와 비밀번호를 확인해 주세요."),
   SERVER_ERROR(HttpStatus.UNAUTHORIZED, "서버에서 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."),
 
+  // 401 Unautorized
+  // OAuth2 로그인 시 발생하는 예외
+  ILLEGAL_REGISTRATION_ID(HttpStatus.UNAUTHORIZED, "죄송합니다. 지원되지 않는 인증 제공자입니다. 다른 로그인 방법을 시도해 주세요."),
+
   // 404 Not Found
   MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 아이디의 회원이 없습니다."),
 

@@ -18,6 +18,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Table(name = "note")
 public class Note extends BaseEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long noteId;
 
   @ManyToOne
