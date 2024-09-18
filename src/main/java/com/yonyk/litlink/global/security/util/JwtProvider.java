@@ -2,7 +2,7 @@ package com.yonyk.litlink.global.security.util;
 
 import com.yonyk.litlink.domain.member.entity.Member;
 import com.yonyk.litlink.domain.member.repository.MemberRepository;
-import com.yonyk.litlink.domain.member.service.MemberService;
+import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
 import com.yonyk.litlink.global.security.dto.JwtDTO;
 import io.jsonwebtoken.Claims;
@@ -15,19 +15,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
 
-  private final MemberService memberService;
+  private final MemberRepository memberRepository;
 
   // jwt 시크릿 키
   @Value("${jwt.secret}")
@@ -93,7 +96,8 @@ public class JwtProvider {
 
     return new JwtDTO(accessToken, refreshToken);
   }
-
+  
+  // accessToken 파싱 후 인증객체 생성
   public Authentication getAuthentication(String token) {
     // accessToken에서 prefix 제거
     String accessToken = token.substring(prefix.length());
@@ -101,7 +105,8 @@ public class JwtProvider {
     Claims claims =
             Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
     // accessToken에 담긴 memberId로 Member 가져오기
-    Member findMember = memberService.findById(Long.parseLong(claims.getSubject()));
+    Member findMember = memberRepository.findById(Long.parseLong(claims.getSubject()))
+            .orElseThrow(() -> new UsernameNotFoundException(SecurityExceptionType.MEMBER_NOT_FOUND.getMessage()));
     // PrincipalDetails 생성
     UserDetails userDetails = PrincipalDetails.builder().member(findMember).build();
     // 인증객체 생성

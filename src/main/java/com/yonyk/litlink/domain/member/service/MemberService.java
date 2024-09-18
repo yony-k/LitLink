@@ -5,9 +5,10 @@ import com.yonyk.litlink.domain.member.repository.MemberRepository;
 import com.yonyk.litlink.global.error.CustomException;
 import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
 import com.yonyk.litlink.global.security.details.OAuth2UserDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class MemberService {
 
   private final MemberRepository memberRepository;
+  private final JwtService jwtService;
 
   // OAuth2 회원가입 및 로그인
   public Member getOrRegister(OAuth2UserDTO oAuth2UserDTO) {
@@ -38,4 +40,18 @@ public class MemberService {
             .orElseThrow(() -> new UsernameNotFoundException(SecurityExceptionType.MEMBER_NOT_FOUND.getMessage()));
   }
 
+  // 회원탈퇴
+  public void cancleAccount(long memberId){
+    // 회원이 존재하는지 확인
+    Member findMember = findById(memberId);
+    // 회원이 존재하지 않는다면 예외 발생
+    if(findMember == null) throw new CustomException(SecurityExceptionType.MEMBER_NOT_FOUND);
+    // 회원이 존재하면 소프트 딜리트
+    else memberRepository.delete(findMember);
+  }
+
+  // refreshToken 재발급
+  public void reissueRefreshToken(HttpServletRequest request, HttpServletResponse response) {
+    jwtService.reissueRefreshToken(request, response);
+  }
 }
