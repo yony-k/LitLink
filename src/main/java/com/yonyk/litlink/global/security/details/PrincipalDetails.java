@@ -1,8 +1,7 @@
 package com.yonyk.litlink.global.security.details;
 
 import com.yonyk.litlink.domain.member.entity.Member;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +11,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@RequiredArgsConstructor
 public class PrincipalDetails implements UserDetails, OAuth2User {
-  private final Member member;
-  private final Map<String, Object> attributes;
+
+  private Member member;
+  private Map<String, Object> attributes;
 
   // OAuth2 제공자에서 사용되는 사용자 고유ID
   @Override

@@ -17,8 +17,8 @@ public class MemberService {
   private final MemberRepository memberRepository;
 
   public Member getOrRegister(OAuth2UserDTO oAuth2UserDTO) {
-    // 이메일로 등록된 회원 있는지 확인
-    Optional<Member> member = memberRepository.findByEmail(oAuth2UserDTO.email());
+    // 등록된 회원 있는지 확인
+    Optional<Member> member = memberRepository.findByAuthIdAndProvider(oAuth2UserDTO.authId(), oAuth2UserDTO.provider());
     // 존재한다면 DB의 Member 반환
     if (member.isPresent()) {
       return member.get();

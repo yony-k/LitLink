@@ -29,9 +29,9 @@ public record OAuth2UserDTO(
     Map<String, Object> account = (Map<String, Object>) oAuth2UserAttributes.get("kakao_account");
     Map<String, Object> profile = (Map<String, Object>) account.get("profile");
     return OAuth2UserDTO.builder()
-            .authId(userNameAttributeName)
+            .authId(oAuth2UserAttributes.get(userNameAttributeName).toString())
             .memberName(java.lang.String.valueOf(profile.get("nickname")))
-            .email(java.lang.String.valueOf(profile.get("email")))
+            .email(java.lang.String.valueOf(account.get("email")))
             .imageUrl(java.lang.String.valueOf(profile.get("profile_image_url")))
             .provider("KaKao")
             .build();
