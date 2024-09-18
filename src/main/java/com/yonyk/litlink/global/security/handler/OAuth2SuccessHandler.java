@@ -26,7 +26,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
   private final JwtProvider jwtProvider;
   private final CookieProvider cookieProvider;
   private final RefreshTokenRepository refreshTokenRepository;
-  private final SecurityExceptionHandler securityExceptionHandler;
+  private final SecurityResponseHandler securityResponseHandler;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -36,7 +36,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
     addTokensToResponse(response, jwtDTO);
     // Redis에 refreshToken 저장
     storeRefreshToken(authentication, jwtDTO);
-    securityExceptionHandler.sendResponse("로그인 성공", HttpStatus.OK, response);
+    securityResponseHandler.sendResponse("로그인 성공", HttpStatus.OK, response);
   }
 
   // accessToken은 헤더에 저장, refreshToken은 쿠키에 저장

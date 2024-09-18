@@ -1,8 +1,9 @@
 package com.yonyk.litlink.global.config;
 
 import com.yonyk.litlink.global.security.handler.CustomAccessDeniedHandler;
+import com.yonyk.litlink.global.security.handler.CustomLogoutHandler;
+import com.yonyk.litlink.global.security.handler.CustomLogoutSuccessHandler;
 import com.yonyk.litlink.global.security.handler.OAuth2SuccessHandler;
-import com.yonyk.litlink.global.security.handler.SecurityExceptionHandler;
 import com.yonyk.litlink.global.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -31,6 +33,10 @@ public class SpringSecurityConfig {
   private final OAuth2SuccessHandler customOAuth2SuccessHandler;
   // 권한 예외 처리 핸들러
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
+  // 로그아웃 핸들러
+  private final CustomLogoutHandler customLogoutHandler;
+  // 로그아웃 성공 핸들러
+  private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
 
 
@@ -93,15 +99,15 @@ public class SpringSecurityConfig {
 
             // 예외 처리 핸들러 설정
             .exceptionHandling(
-                    exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler));
-            /*
+                    exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler))
             // 로그아웃 처리
             .logout(
                     logout ->
                             logout
-                                    .logoutUrl("/api/members/logout")
+                                    .logoutUrl("/api/logout")
                                     .addLogoutHandler(customLogoutHandler)
                                     .logoutSuccessHandler(customLogoutSuccessHandler));
+            /*
     // 커스텀 필터 설정
     http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class SecurityExceptionHandler {
+public class SecurityResponseHandler {
   // 예외 종류 확인해서 적절한 메세지 리턴
   public String getExceptionMessage(Exception e) {
     String exceptioin = e.getClass().getSimpleName();

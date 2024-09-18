@@ -33,6 +33,7 @@ public class CookieProvider {
   // 리프레시 토큰 쿠키 생성
   public Cookie createRefreshTokenCookie(String refreshToken) {
     Cookie cookie = new Cookie(cookieName, refreshToken);
+    cookie.setPath("/");
     cookie.setMaxAge(cookieLimitTime);
     cookie.setDomain(cookieDomain);
     cookie.setHttpOnly(cookieHttpOnly);

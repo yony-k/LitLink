@@ -53,6 +53,7 @@ cookie:
   refresh-token:
     cookie-name: Refresh
     limit-time: 259200
-    accepted-url: /api/members/refresh_token
+    accepted-url: /
     domain: ${COOKIE_DOMAIN}
     http-only: true
+    same-site: Lax

@@ -18,12 +18,12 @@ import java.io.IOException;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-  private final SecurityExceptionHandler securityExceptionHandler;
+  private final SecurityResponseHandler securityResponseHandler;
 
   @Override
   public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
     log.error("권한 검증 오류 발생");
-    securityExceptionHandler.sendResponse(
+    securityResponseHandler.sendResponse(
             SecurityExceptionType.UNAUTHRIZED_REQUEST.getMessage(), HttpStatus.FORBIDDEN, response);
   }
 }
