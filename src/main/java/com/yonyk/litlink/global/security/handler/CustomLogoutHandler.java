@@ -36,6 +36,9 @@ public class CustomLogoutHandler implements LogoutHandler {
       response.addCookie(findCookie);
       // redis에서 refreshToken 삭제
       deleteRefreshTokenInRedis(findCookie);
+      
+      // 클라이언트에 응답
+      securityResponseHandler.sendResponse("로그아웃 성공", HttpStatus.OK, response);
     } catch (Exception e) {
       log.error("로그아웃 오류: {}", e.getMessage());
       try {

@@ -1,7 +1,11 @@
 package com.yonyk.litlink.global.security.util;
 
+import com.yonyk.litlink.domain.member.entity.Member;
+import com.yonyk.litlink.domain.member.repository.MemberRepository;
+import com.yonyk.litlink.domain.member.service.MemberService;
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
 import com.yonyk.litlink.global.security.dto.JwtDTO;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -9,8 +13,10 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -20,6 +26,8 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
+
+  private final MemberService memberService;
 
   // jwt 시크릿 키
   @Value("${jwt.secret}")
@@ -84,5 +92,19 @@ public class JwtProvider {
                     .compact();
 
     return new JwtDTO(accessToken, refreshToken);
+  }
+
+  public Authentication getAuthentication(String token) {
+    // accessToken에서 prefix 제거
+    String accessToken = token.substring(prefix.length());
+    // 액세스 토큰 해석하여 정보 가져오기
+    Claims claims =
+            Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
+    // accessToken에 담긴 memberId로 Member 가져오기
+    Member findMember = memberService.findById(Long.parseLong(claims.getSubject()));
+    // PrincipalDetails 생성
+    UserDetails userDetails = PrincipalDetails.builder().member(findMember).build();
+    // 인증객체 생성
+    return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
 }

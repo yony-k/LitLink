@@ -1,8 +1,9 @@
 package com.yonyk.litlink.global.config;
 
+import com.yonyk.litlink.global.security.filter.JwtAuthorizationFilter;
 import com.yonyk.litlink.global.security.handler.CustomAccessDeniedHandler;
+import com.yonyk.litlink.global.security.handler.CustomAuthenticationEntryPoint;
 import com.yonyk.litlink.global.security.handler.CustomLogoutHandler;
-import com.yonyk.litlink.global.security.handler.CustomLogoutSuccessHandler;
 import com.yonyk.litlink.global.security.handler.OAuth2SuccessHandler;
 import com.yonyk.litlink.global.security.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,10 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class SpringSecurityConfig {
 
+  // accessToken 헤더 이름
+  @Value("${jwt.access-token-header}")
+  public String accessTokenHeader;
+
   // OAuth2 로그인 처리 서비스 
   private final CustomOAuth2UserService customOAuth2UserService;
   // OAuth2 로그인 성공 처리 핸들러
@@ -35,20 +40,16 @@ public class SpringSecurityConfig {
   private final CustomAccessDeniedHandler customAccessDeniedHandler;
   // 로그아웃 핸들러
   private final CustomLogoutHandler customLogoutHandler;
-  // 로그아웃 성공 핸들러
-  private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
-
-
-  // accessToken 헤더 이름
-  @Value("${jwt.access-token-header}")
-  public String accessTokenHeader;
+  // 인가 필터
+  private final JwtAuthorizationFilter jwtAuthorizationFilter;
+  // 인가 예외 처리 핸들러
+  private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
   // 특정 요청 경로에 대해서는 시큐리티 검사 무시
   // resources는 이미지, css, javascript 파일등에 대한 요청을 의미함
   @Bean
   WebSecurityCustomizer webSecurityCustomizer() {
-    return (webSecurity) -> webSecurity.ignoring().requestMatchers("/resources/**");
+    return (webSecurity) -> webSecurity.ignoring().requestMatchers("/resources/**", "/favicon.ico");
   }
 
   // 지정된 출처(주소)에서 오는 요청 관련 설정
@@ -90,6 +91,8 @@ public class SpringSecurityConfig {
                                     // 회원가입, 로그인, 액세스 토큰 재발급
                                     .requestMatchers("/oauth2/**", "/api/members/refresh-token")
                                     .permitAll()
+                                    .requestMatchers("/api/members/test")
+                                    .hasRole("USER")
                                     // 이외 모든 요청 인증 필요
                                     .anyRequest()
                                     .authenticated())
@@ -99,19 +102,17 @@ public class SpringSecurityConfig {
 
             // 예외 처리 핸들러 설정
             .exceptionHandling(
-                    exceptionHandling -> exceptionHandling.accessDeniedHandler(customAccessDeniedHandler))
+                    exceptionHandling -> exceptionHandling
+                            .authenticationEntryPoint(customAuthenticationEntryPoint)
+                            .accessDeniedHandler(customAccessDeniedHandler))
             // 로그아웃 처리
             .logout(
                     logout ->
                             logout
                                     .logoutUrl("/api/logout")
-                                    .addLogoutHandler(customLogoutHandler)
-                                    .logoutSuccessHandler(customLogoutSuccessHandler));
-            /*
+                                    .addLogoutHandler(customLogoutHandler));
     // 커스텀 필터 설정
-    http.addFilterBefore(authenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-     */
+    http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

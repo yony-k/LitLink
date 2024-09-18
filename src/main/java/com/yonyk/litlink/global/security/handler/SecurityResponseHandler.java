@@ -26,6 +26,9 @@ public class SecurityResponseHandler {
       case "IOException":
         message = SecurityExceptionType.IO_ERROR_PROCESSING_REQUEST.getMessage();
         break;
+      case "UsernameNotFoundException":
+        message = SecurityExceptionType.MEMBER_NOT_FOUND.getMessage();
+        break;
       case "AuthenticationException":
         message = SecurityExceptionType.INVALID_CREDENTIALS.getMessage();
         break;
