@@ -1,0 +1,23 @@
+type Query {
+    getBookmarks : [BookMarkDTO]
+}
+
+type Mutation {
+    saveBookMark(isbn: String!) : String!
+}
+
+type BookMarkDTO {
+    bookMarkId: ID!,
+    memberId: Int!,
+    bookId: Int!,
+    title: String!,
+    link: String,
+    image: String,
+    author: String,
+    discount: Int,
+    publisher: String,
+    isbn: String,
+    description: String,
+    pubdate: String,
+    likeCount: Int
+}

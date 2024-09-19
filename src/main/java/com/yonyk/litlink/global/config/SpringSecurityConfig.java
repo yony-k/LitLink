@@ -89,7 +89,7 @@ public class SpringSecurityConfig {
                                     .requestMatchers("/v3/**", "/swagger-ui/**")
                                     .permitAll()
                                     // 회원가입, 로그인, 액세스 토큰 재발급
-                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token", "/api/book")
+                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token", "/api/book", "/graphiql")
                                     .permitAll()
                                     .requestMatchers("/api/members/**", "/api/bookmark/**", "/graphql")
                                     .authenticated()

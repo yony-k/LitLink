@@ -1,8 +1,10 @@
-package com.yonyk.litlink.global.common.service;
+package com.yonyk.litlink.global.common.book.service;
 
-import com.yonyk.litlink.global.common.dto.request.BookSerchDTO;
-import com.yonyk.litlink.global.common.dto.response.BookDTO;
-import com.yonyk.litlink.global.common.dto.response.BookSerchResult;
+import com.yonyk.litlink.global.common.book.dto.request.BookSerchDTO;
+import com.yonyk.litlink.global.common.book.dto.response.BookDTO;
+import com.yonyk.litlink.global.common.book.dto.response.BookSerchResult;
+import com.yonyk.litlink.global.error.CustomException;
+import com.yonyk.litlink.global.error.exceptionType.BookExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,8 +28,8 @@ public class BookAPIService {
   @Value("${naver.client-secret}")
   String clientSecret;
 
-  // 책 검색
-  public List<BookDTO> serchBooks(BookSerchDTO bookSerchDTO) {
+  // 책 목록 검색
+  public List<BookDTO> serchBookList(BookSerchDTO bookSerchDTO) {
 
     // 요청 Url 생성
     URI uri = UriComponentsBuilder
@@ -53,6 +55,20 @@ public class BookAPIService {
 
     BookSerchResult bookSerchResult = response.getBody();
     return bookSerchResult.items();
+  }
+
+  // 책 상세 검색
+  public BookDTO serchBook(String isbn) {
+    BookSerchDTO bookSerchDTO = BookSerchDTO.builder()
+            .query(isbn)
+            .display(10)
+            .start(1)
+            .sort("sim")
+            .build();
+    List<BookDTO> bookDTOList = serchBookList(bookSerchDTO);
+    // 검색 결과가 있는지 확인
+    if (bookDTOList.isEmpty()) throw new CustomException(BookExceptionType.BOOK_NOT_FOUND);
+    return bookDTOList.get(0);
   }
 }
 

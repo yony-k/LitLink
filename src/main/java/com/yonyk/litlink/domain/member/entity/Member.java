@@ -2,7 +2,7 @@ package com.yonyk.litlink.domain.member.entity;
 
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.member.entity.enums.MemberRole;
-import com.yonyk.litlink.global.common.entity.BaseEntity;
+import com.yonyk.litlink.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;

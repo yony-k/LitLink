@@ -1,9 +1,9 @@
 package com.yonyk.litlink.domain.bookmark.entity;
 
-import com.yonyk.litlink.global.common.entity.Book;
+import com.yonyk.litlink.global.common.book.entity.Book;
 import com.yonyk.litlink.domain.member.entity.Member;
 import com.yonyk.litlink.domain.note.entity.Note;
-import com.yonyk.litlink.global.common.entity.BaseEntity;
+import com.yonyk.litlink.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
