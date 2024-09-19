@@ -1,5 +1,6 @@
 type Query {
     getBookMarks : [BookMarkDTO]
+    getBookMark(bookMarkId: ID!) : BookMarkDTO
 }
 
 type Mutation {

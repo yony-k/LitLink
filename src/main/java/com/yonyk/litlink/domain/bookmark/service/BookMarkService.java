@@ -8,6 +8,8 @@ import com.yonyk.litlink.global.common.book.repository.BookRepository;
 import com.yonyk.litlink.global.common.book.dto.response.BookDTO;
 import com.yonyk.litlink.global.common.book.entity.Book;
 import com.yonyk.litlink.global.common.book.service.BookAPIService;
+import com.yonyk.litlink.global.error.CustomException;
+import com.yonyk.litlink.global.error.exceptionType.BookMarkExceptionType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,4 +58,10 @@ public class BookMarkService {
             .toList();
   }
 
+  // 북마크 상세 조회
+  public BookMarkDTO getBookMark(long bookMarkId) {
+    Optional<BookMark> findBookMark = bookMarkRepository.findById(bookMarkId);
+    if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
+    return BookMarkDTO.toBookMarkDTO(findBookMark.get());
+  }
 }

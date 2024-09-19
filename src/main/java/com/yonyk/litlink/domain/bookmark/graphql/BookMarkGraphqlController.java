@@ -33,4 +33,10 @@ public class BookMarkGraphqlController {
   public List<BookMarkDTO> getBookMarks(@AuthenticationPrincipal PrincipalDetails principalDetails) {
     return bookMarkService.getBookMarks(principalDetails.getMember().getMemberId());
   }
+
+  // 북마크 상세 조회
+  @QueryMapping
+  public BookMarkDTO getBookMark(@Argument String bookMarkId) {
+    return bookMarkService.getBookMark(Long.parseLong(bookMarkId));
+  }
 }
