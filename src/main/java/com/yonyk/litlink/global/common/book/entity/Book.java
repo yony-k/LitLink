@@ -1,4 +1,4 @@
-package com.yonyk.litlink.global.common.entity;
+package com.yonyk.litlink.global.common.book.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +23,7 @@ public class Book {
   private int discount;
   private String publisher;
   private String isbn;
+  @Column(columnDefinition = "TEXT")
   private String description;
   private LocalDate pubdate;
   private int likeCount;

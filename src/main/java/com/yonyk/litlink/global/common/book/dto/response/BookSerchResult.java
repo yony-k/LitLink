@@ -1,4 +1,4 @@
-package com.yonyk.litlink.global.common.dto.response;
+package com.yonyk.litlink.global.common.book.dto.response;
 import java.util.List;
 
 public record BookSerchResult(

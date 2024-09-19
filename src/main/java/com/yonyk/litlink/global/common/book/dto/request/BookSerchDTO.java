@@ -1,5 +1,8 @@
-package com.yonyk.litlink.global.common.dto.request;
+package com.yonyk.litlink.global.common.book.dto.request;
 
+import lombok.Builder;
+
+@Builder
 public record BookSerchDTO(
         String query,
         int display,

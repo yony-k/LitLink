@@ -1,8 +1,8 @@
 package com.yonyk.litlink.domain.book.controller;
 
-import com.yonyk.litlink.global.common.dto.request.BookSerchDTO;
-import com.yonyk.litlink.global.common.dto.response.BookDTO;
-import com.yonyk.litlink.global.common.service.BookAPIService;
+import com.yonyk.litlink.global.common.book.dto.request.BookSerchDTO;
+import com.yonyk.litlink.global.common.book.dto.response.BookDTO;
+import com.yonyk.litlink.global.common.book.service.BookAPIService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +24,6 @@ public class BookController {
   // 책 검색
   @GetMapping
   public ResponseEntity<List<BookDTO>> book(@RequestBody BookSerchDTO bookSerchDTO) {
-    return ResponseEntity.ok(bookService.serchBooks(bookSerchDTO));
+    return ResponseEntity.ok(bookService.serchBookList(bookSerchDTO));
   }
 }
