@@ -1,5 +1,6 @@
 package com.yonyk.litlink.domain.bookmark.service;
 
+import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.member.entity.Member;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -45,6 +47,13 @@ public class BookMarkService {
     
     // BookMark 저장
     bookMarkRepository.save(bookMark);
+  }
+
+  // 북마크 목록 조회
+  public List<BookMarkDTO> getBookMarks(long memberId) {
+    return bookMarkRepository.findByMemberMemberId(memberId).stream()
+            .map(BookMarkDTO::toBookMarkDTO)
+            .toList();
   }
 
 }

@@ -17,7 +17,6 @@ public class BookMarkController {
 
   @PostMapping
   public RequestEntity<String> saveBookMark(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-
     return null;
   }
 
