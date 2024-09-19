@@ -1,4 +1,4 @@
-package com.yonyk.litlink.global.common;
+package com.yonyk.litlink.global.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

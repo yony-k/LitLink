@@ -89,10 +89,10 @@ public class SpringSecurityConfig {
                                     .requestMatchers("/v3/**", "/swagger-ui/**")
                                     .permitAll()
                                     // 회원가입, 로그인, 액세스 토큰 재발급
-                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token")
+                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token", "/api/book")
                                     .permitAll()
-                                    .requestMatchers("/api/members/test")
-                                    .hasRole("USER")
+                                    .requestMatchers("/api/members/**", "/api/bookmark/**", "/graphql")
+                                    .authenticated()
                                     // 이외 모든 요청 인증 필요
                                     .anyRequest()
                                     .authenticated())

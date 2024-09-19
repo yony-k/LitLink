@@ -1,9 +1,9 @@
-package com.yonyk.litlink.domain.book.entity;
+package com.yonyk.litlink.global.common.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -24,6 +24,6 @@ public class Book {
   private String publisher;
   private String isbn;
   private String description;
-  private LocalDateTime pubdate;
+  private LocalDate pubdate;
   private int likeCount;
 }
