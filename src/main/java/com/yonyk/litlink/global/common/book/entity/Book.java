@@ -27,4 +27,12 @@ public class Book {
   private String description;
   private LocalDate pubdate;
   private int likeCount;
+
+  public void incrementLikeCount() {
+    likeCount++;
+  }
+
+  public void decrementLikeCount() {
+    if(likeCount > 0) likeCount--;
+  }
 }

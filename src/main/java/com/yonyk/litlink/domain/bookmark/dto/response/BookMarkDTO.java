@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 public record BookMarkDTO(
         long bookMarkId,
         long memberId,
+        boolean liked,
         long bookId,
         String title,
         String link,
@@ -31,6 +32,7 @@ public record BookMarkDTO(
     return BookMarkDTO.builder()
             .bookMarkId(bookMark.getBookmarkId())
             .memberId(member.getMemberId())
+            .liked(bookMark.isLiked())
             .bookId(book.getBookId())
             .title(book.getTitle())
             .link(book.getLink())

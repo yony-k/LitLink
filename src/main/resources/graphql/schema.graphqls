@@ -5,11 +5,13 @@ type Query {
 
 type Mutation {
     saveBookMark(isbn: String!) : String!
+    likeBookMark(bookMarkId: ID!) : String!
 }
 
 type BookMarkDTO {
     bookMarkId: ID!,
     memberId: Int!,
+    liked: Boolean,
     bookId: Int!,
     title: String!,
     link: String,

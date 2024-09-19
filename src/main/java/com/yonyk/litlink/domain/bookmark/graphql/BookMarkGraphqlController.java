@@ -41,4 +41,11 @@ public class BookMarkGraphqlController {
   public BookMarkDTO getBookMark(@Argument String bookMarkId) {
     return bookMarkService.getBookMark(Long.parseLong(bookMarkId));
   }
+
+  // 북마크 좋아요 표시
+  @MutationMapping
+  public String likeBookMark(@Argument String bookMarkId) {
+    bookMarkService.likeBookMark(Long.parseLong(bookMarkId));
+    return "좋아요 완료";
+  }
 }

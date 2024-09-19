@@ -53,6 +53,7 @@ public class BookMarkService {
 
   // 북마크 목록 조회
   public List<BookMarkDTO> getBookMarks(long memberId) {
+    // memberId로 목록 조회 후 BookMarkDTO 로 변환하여 반환
     return bookMarkRepository.findByMemberMemberId(memberId).stream()
             .map(BookMarkDTO::toBookMarkDTO)
             .toList();
@@ -60,8 +61,26 @@ public class BookMarkService {
 
   // 북마크 상세 조회
   public BookMarkDTO getBookMark(long bookMarkId) {
+    // bookMarkId에 해당하는 BookMark 가 있는지 확인
     Optional<BookMark> findBookMark = bookMarkRepository.findById(bookMarkId);
+    // 없다면 예외 반환
     if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
+    // BookMarkDTO 로 변환하여 반환
     return BookMarkDTO.toBookMarkDTO(findBookMark.get());
+  }
+
+  // 북마크 좋아요 표시
+  @Transactional
+  public void likeBookMark(long bookMarkId) {
+    // bookMarkId에 해당하는 BookMark 가 있는지 확인
+    Optional<BookMark> findBookMark = bookMarkRepository.findById(bookMarkId);
+    // 없다면 예외 반환
+    if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
+    // liked 필드를 true로 값을 바꾸고 저장
+    findBookMark.get().like();
+    bookMarkRepository.save(findBookMark.get());
+    // Book 엔티티의 likeCount 변경
+    findBookMark.get().getBook().incrementLikeCount();
+    bookRepository.save(findBookMark.get().getBook());
   }
 }

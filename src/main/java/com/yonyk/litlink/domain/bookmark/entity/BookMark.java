@@ -33,6 +33,17 @@ public class BookMark extends BaseEntity {
   @JoinColumn(name = "book_id")
   private Book book;
 
+  @Column
+  private boolean liked=false;
+
   @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Note> notes;
+
+  public void like() {
+    this.liked = true;
+  }
+
+  public void unlike() {
+    this.liked = false;
+  }
 }
