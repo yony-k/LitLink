@@ -37,8 +37,6 @@ public class BookMarkService {
       book = bookRepository.save(book);
     }
 
-    System.out.println("book: " + book);
-
     // BookMark 엔티티 생성
     BookMark bookMark = BookMark.builder()
             .member(member)
