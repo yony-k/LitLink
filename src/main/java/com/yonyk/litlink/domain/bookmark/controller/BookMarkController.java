@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/bookmark")
 public class BookMarkController {
 
+  // 북마크 공유 기능
   @PostMapping
   public RequestEntity<String> saveBookMark(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+
+
+
     return null;
   }
 

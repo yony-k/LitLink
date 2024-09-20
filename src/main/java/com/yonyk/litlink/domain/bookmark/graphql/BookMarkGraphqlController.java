@@ -38,14 +38,24 @@ public class BookMarkGraphqlController {
 
   // 북마크 상세 조회
   @QueryMapping
-  public BookMarkDTO getBookMark(@Argument String bookMarkId) {
-    return bookMarkService.getBookMark(Long.parseLong(bookMarkId));
+  public BookMarkDTO getBookMark(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                 @Argument String bookMarkId) {
+    return bookMarkService.getBookMark(principalDetails.getMember().getMemberId(), Long.parseLong(bookMarkId));
   }
 
   // 북마크 좋아요 표시
   @MutationMapping
-  public String likeBookMark(@Argument String bookMarkId) {
-    bookMarkService.likeBookMark(Long.parseLong(bookMarkId));
+  public String likeBookMark(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                             @Argument String bookMarkId) {
+    bookMarkService.likeBookMark(principalDetails.getMember().getMemberId(), Long.parseLong(bookMarkId));
     return "좋아요 완료";
+  }
+
+  // 북마크 삭제
+  @MutationMapping
+  public String deleteBookMark(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                               @Argument String bookMarkId) {
+    bookMarkService.deleteBookMark(principalDetails.getMember().getMemberId(), Long.parseLong(bookMarkId));
+    return "삭제가 완료되었습니다.";
   }
 }

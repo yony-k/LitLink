@@ -60,27 +60,49 @@ public class BookMarkService {
   }
 
   // 북마크 상세 조회
-  public BookMarkDTO getBookMark(long bookMarkId) {
-    // bookMarkId에 해당하는 BookMark 가 있는지 확인
-    Optional<BookMark> findBookMark = bookMarkRepository.findById(bookMarkId);
-    // 없다면 예외 반환
-    if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
+  public BookMarkDTO getBookMark(long memberId, long bookMarkId) {
+    // BookMark 엔티티 가져오기
+    BookMark bookMark = findBookMark(memberId, bookMarkId);
     // BookMarkDTO 로 변환하여 반환
-    return BookMarkDTO.toBookMarkDTO(findBookMark.get());
+    return BookMarkDTO.toBookMarkDTO(bookMark);
   }
 
   // 북마크 좋아요 표시
   @Transactional
-  public void likeBookMark(long bookMarkId) {
+  public void likeBookMark(long memberId, long bookMarkId) {
+    // BookMark 엔티티 가져오기
+    BookMark bookMark = findBookMark(memberId, bookMarkId);
+    // liked 필드를 true로 값을 바꾸고 저장
+    bookMark.like();
+    bookMarkRepository.save(bookMark);
+    // Book 엔티티의 likeCount 변경
+    bookMark.getBook().incrementLikeCount();
+    bookRepository.save(bookMark.getBook());
+  }
+
+  // 북마크 삭제
+  public void deleteBookMark(long memberId, long bookMarkId) {
+    // BookMark 엔티티 가져오기
+    BookMark bookMark = findBookMark(memberId, bookMarkId);
+    // BookMark softdelete
+    bookMarkRepository.delete(bookMark);
+  }
+
+  // 북마크 공유
+  public String shareBookMark(long bookMarkId) {
+
+
+    return null;
+  }
+
+
+  // 북마크 존재 확인
+  private BookMark findBookMark(long memberId, long bookMarkId) {
     // bookMarkId에 해당하는 BookMark 가 있는지 확인
-    Optional<BookMark> findBookMark = bookMarkRepository.findById(bookMarkId);
+    Optional<BookMark> findBookMark = bookMarkRepository.findByMemberMemberIdAndBookMarkId(memberId, bookMarkId);
     // 없다면 예외 반환
     if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
-    // liked 필드를 true로 값을 바꾸고 저장
-    findBookMark.get().like();
-    bookMarkRepository.save(findBookMark.get());
-    // Book 엔티티의 likeCount 변경
-    findBookMark.get().getBook().incrementLikeCount();
-    bookRepository.save(findBookMark.get().getBook());
+    // 있다면 BookMark 반환
+    return findBookMark.get();
   }
 }
