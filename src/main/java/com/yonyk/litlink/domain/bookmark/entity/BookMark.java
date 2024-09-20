@@ -1,15 +1,18 @@
 package com.yonyk.litlink.domain.bookmark.entity;
 
-import com.yonyk.litlink.global.common.book.entity.Book;
-import com.yonyk.litlink.domain.member.entity.Member;
-import com.yonyk.litlink.domain.note.entity.Note;
-import com.yonyk.litlink.global.common.BaseEntity;
+import java.util.List;
+
 import jakarta.persistence.*;
-import lombok.*;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.util.List;
+import com.yonyk.litlink.domain.member.entity.Member;
+import com.yonyk.litlink.domain.note.entity.Note;
+import com.yonyk.litlink.global.common.BaseEntity;
+import com.yonyk.litlink.global.common.book.entity.Book;
+
+import lombok.*;
 
 @Builder
 @Getter
@@ -33,8 +36,7 @@ public class BookMark extends BaseEntity {
   @JoinColumn(name = "book_id")
   private Book book;
 
-  @Column
-  private boolean liked=false;
+  @Builder.Default private boolean liked = false;
 
   @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Note> notes;

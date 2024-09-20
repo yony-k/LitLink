@@ -1,22 +1,25 @@
 package com.yonyk.litlink.global.security.handler;
 
+import java.io.IOException;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
 import com.yonyk.litlink.global.security.dto.JwtDTO;
 import com.yonyk.litlink.global.security.redis.RefreshToken;
 import com.yonyk.litlink.global.security.redis.RefreshTokenRepository;
 import com.yonyk.litlink.global.security.util.CookieProvider;
 import com.yonyk.litlink.global.security.util.JwtProvider;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,7 +32,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
   private final SecurityResponseHandler securityResponseHandler;
 
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+  public void onAuthenticationSuccess(
+      HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+      throws IOException, ServletException {
     // accessToken, refreshToken 생성
     JwtDTO jwtDTO = jwtProvider.getLoginToken(authentication);
     // 각 토큰 저장
@@ -48,7 +53,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
   // redis에 refreshToken 저장, memberId는 String으로 변환 후 저장
   private void storeRefreshToken(Authentication authResult, JwtDTO jwtDTO) {
     long memberId = ((PrincipalDetails) authResult.getPrincipal()).getMember().getMemberId();
-    refreshTokenRepository.save(
-            new RefreshToken(jwtDTO.refreshToken(), String.valueOf(memberId)));
+    refreshTokenRepository.save(new RefreshToken(jwtDTO.refreshToken(), String.valueOf(memberId)));
   }
 }

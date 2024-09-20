@@ -1,9 +1,10 @@
 package com.yonyk.litlink.global.common.book.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Builder
 @Getter
@@ -16,6 +17,7 @@ public class Book {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long bookId;
+
   private String title;
   private String link;
   private String image;
@@ -23,8 +25,10 @@ public class Book {
   private int discount;
   private String publisher;
   private String isbn;
+
   @Column(columnDefinition = "TEXT")
   private String description;
+
   private LocalDate pubdate;
   private int likeCount;
 
@@ -33,6 +37,6 @@ public class Book {
   }
 
   public void decrementLikeCount() {
-    if(likeCount > 0) likeCount--;
+    if (likeCount > 0) likeCount--;
   }
 }

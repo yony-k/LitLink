@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class LitLinkApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LitLinkApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(LitLinkApplication.class, args);
+  }
 }

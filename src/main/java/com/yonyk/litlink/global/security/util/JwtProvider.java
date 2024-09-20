@@ -1,17 +1,11 @@
 package com.yonyk.litlink.global.security.util;
 
-import com.yonyk.litlink.domain.member.entity.Member;
-import com.yonyk.litlink.domain.member.repository.MemberRepository;
-import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
-import com.yonyk.litlink.global.security.details.PrincipalDetails;
-import com.yonyk.litlink.global.security.dto.JwtDTO;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,8 +14,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
-import java.util.Date;
+import com.yonyk.litlink.domain.member.entity.Member;
+import com.yonyk.litlink.domain.member.repository.MemberRepository;
+import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+import com.yonyk.litlink.global.security.details.PrincipalDetails;
+import com.yonyk.litlink.global.security.dto.JwtDTO;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -64,10 +68,10 @@ public class JwtProvider {
   public JwtDTO getLoginToken(Authentication authResult) {
     PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
     String authorities =
-            principalDetails.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .findFirst()
-                    .orElseThrow(() -> new IllegalStateException("권한이 없는 사용자"));
+        principalDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("권한이 없는 사용자"));
     long memberId = principalDetails.getMember().getMemberId();
     return generateJwt(authorities, memberId);
   }
@@ -78,33 +82,38 @@ public class JwtProvider {
 
     // 액세스 토큰 생성
     String accessToken =
-            Jwts.builder()
-                    .subject(String.valueOf(memberId))
-                    .claim("authorities", authorities)
-                    .expiration(new Date(now + (accessTokenTTL * 1000L)))
-                    .signWith(key)
-                    .compact();
+        Jwts.builder()
+            .subject(String.valueOf(memberId))
+            .claim("authorities", authorities)
+            .expiration(new Date(now + (accessTokenTTL * 1000L)))
+            .signWith(key)
+            .compact();
     // 리프레시 토큰 생성
     String refreshToken =
-            Jwts.builder()
-                    .subject(String.valueOf(memberId))
-                    .expiration(new Date(now + (refreshTokenTTL * 1000L)))
-                    .signWith(key)
-                    .compact();
+        Jwts.builder()
+            .subject(String.valueOf(memberId))
+            .expiration(new Date(now + (refreshTokenTTL * 1000L)))
+            .signWith(key)
+            .compact();
 
     return new JwtDTO(accessToken, refreshToken);
   }
-  
+
   // accessToken 파싱 후 인증객체 생성
   public Authentication getAuthentication(String token) {
     // accessToken에서 prefix 제거
     String accessToken = token.substring(prefix.length());
     // 액세스 토큰 해석하여 정보 가져오기
     Claims claims =
-            Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
+        Jwts.parser().verifyWith(key).build().parseSignedClaims(accessToken).getPayload();
     // accessToken에 담긴 memberId로 Member 가져오기
-    Member findMember = memberRepository.findById(Long.parseLong(claims.getSubject()))
-            .orElseThrow(() -> new UsernameNotFoundException(SecurityExceptionType.MEMBER_NOT_FOUND.getMessage()));
+    Member findMember =
+        memberRepository
+            .findById(Long.parseLong(claims.getSubject()))
+            .orElseThrow(
+                () ->
+                    new UsernameNotFoundException(
+                        SecurityExceptionType.MEMBER_NOT_FOUND.getMessage()));
     // PrincipalDetails 생성
     UserDetails userDetails = PrincipalDetails.builder().member(findMember).build();
     // 인증객체 생성
@@ -116,9 +125,9 @@ public class JwtProvider {
     long now = (new Date()).getTime();
     // 공유 용 토큰 생성
     return Jwts.builder()
-                    .subject(String.valueOf(bookMarkId))
-                    .expiration(new Date(now + (600L * 1000L)))
-                    .signWith(key)
-                    .compact();
+        .subject(String.valueOf(bookMarkId))
+        .expiration(new Date(now + (600L * 1000L)))
+        .signWith(key)
+        .compact();
   }
 }

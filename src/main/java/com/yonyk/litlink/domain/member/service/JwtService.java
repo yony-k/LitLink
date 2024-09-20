@@ -1,5 +1,13 @@
 package com.yonyk.litlink.domain.member.service;
 
+import java.util.Optional;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Service;
+
 import com.yonyk.litlink.domain.member.entity.Member;
 import com.yonyk.litlink.domain.member.repository.MemberRepository;
 import com.yonyk.litlink.global.error.CustomException;
@@ -9,15 +17,9 @@ import com.yonyk.litlink.global.security.redis.RefreshToken;
 import com.yonyk.litlink.global.security.redis.RefreshTokenRepository;
 import com.yonyk.litlink.global.security.util.CookieProvider;
 import com.yonyk.litlink.global.security.util.JwtProvider;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -85,7 +87,8 @@ public class JwtService {
   // 토큰 재발급
   private void reissueToken(Member findMember, HttpServletResponse response) {
     // 사용자 정보로 리프레시 토큰, 엑세스 토큰 다시 만들기
-    JwtDTO reissueToken = jwtProvider.generateJwt(findMember.getMemberRole().getRole(), findMember.getMemberId());
+    JwtDTO reissueToken =
+        jwtProvider.generateJwt(findMember.getMemberRole().getRole(), findMember.getMemberId());
     // accessToken은 헤더에 저장
     response.setHeader(
         jwtProvider.accessTokenHeader, jwtProvider.prefix + reissueToken.accessToken());

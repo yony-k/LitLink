@@ -1,15 +1,18 @@
 package com.yonyk.litlink.global.security.util;
 
-import com.yonyk.litlink.global.error.CustomException;
-import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+import java.util.Arrays;
+import java.util.Optional;
+
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Optional;
+import com.yonyk.litlink.global.error.CustomException;
+import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -57,7 +60,7 @@ public class CookieProvider {
   // 리퀘스트에서 리프레시 토큰 빼오기
   public Optional<Cookie> getRefreshTokenCookie(HttpServletRequest request) {
     return Arrays.stream(request.getCookies())
-            .filter(cookie -> cookieName.equals(cookie.getName()))
-            .findFirst();
+        .filter(cookie -> cookieName.equals(cookie.getName()))
+        .findFirst();
   }
 }

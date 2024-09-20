@@ -1,25 +1,27 @@
 package com.yonyk.litlink.domain.bookmark.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.bookmark.redis.ShareToken;
 import com.yonyk.litlink.domain.bookmark.redis.ShareTokenRepository;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.member.entity.Member;
-import com.yonyk.litlink.global.common.book.repository.BookRepository;
 import com.yonyk.litlink.global.common.book.entity.Book;
+import com.yonyk.litlink.global.common.book.repository.BookRepository;
 import com.yonyk.litlink.global.common.book.service.BookAPIService;
 import com.yonyk.litlink.global.error.CustomException;
 import com.yonyk.litlink.global.error.exceptionType.BookMarkExceptionType;
 import com.yonyk.litlink.global.security.util.JwtProvider;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -50,11 +52,8 @@ public class BookMarkService {
     }
 
     // BookMark 엔티티 생성
-    BookMark bookMark = BookMark.builder()
-            .member(member)
-            .book(book)
-            .build();
-    
+    BookMark bookMark = BookMark.builder().member(member).book(book).build();
+
     // BookMark 저장
     bookMarkRepository.save(bookMark);
   }
@@ -63,8 +62,8 @@ public class BookMarkService {
   public List<BookMarkDTO> getBookMarks(long memberId) {
     // memberId로 목록 조회 후 BookMarkDTO 로 변환하여 반환
     return bookMarkRepository.findByMemberMemberId(memberId).stream()
-            .map(BookMarkDTO::toBookMarkDTO)
-            .toList();
+        .map(BookMarkDTO::toBookMarkDTO)
+        .toList();
   }
 
   // 북마크 상세 조회
@@ -124,9 +123,10 @@ public class BookMarkService {
   // 북마크 존재 확인
   private BookMark findBookMark(long memberId, long bookMarkId) {
     // bookMarkId에 해당하는 BookMark 가 있는지 확인
-    Optional<BookMark> findBookMark = bookMarkRepository.findByBookmarkIdAndMemberMemberId(bookMarkId, memberId);
+    Optional<BookMark> findBookMark =
+        bookMarkRepository.findByBookmarkIdAndMemberMemberId(bookMarkId, memberId);
     // 없다면 예외 반환
-    if(findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
+    if (findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
     // 있다면 BookMark 반환
     return findBookMark.get();
   }

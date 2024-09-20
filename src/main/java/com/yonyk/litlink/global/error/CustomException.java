@@ -1,6 +1,7 @@
 package com.yonyk.litlink.global.error;
 
 import com.yonyk.litlink.global.error.exceptionType.ExceptionType;
+
 import lombok.Getter;
 
 @Getter
