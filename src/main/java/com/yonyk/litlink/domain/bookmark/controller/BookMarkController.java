@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
+import com.yonyk.litlink.domain.bookmark.dto.response.ShareBookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.service.BookMarkService;
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
 
@@ -30,7 +30,7 @@ public class BookMarkController {
 
   // 북마크 공유 기능으로 북마크 상세 조회
   @GetMapping
-  public ResponseEntity<BookMarkDTO> getBookMark(@RequestParam("share") String share) {
+  public ResponseEntity<ShareBookMarkDTO> getBookMark(@RequestParam("share") String share) {
     return ResponseEntity.ok(bookMarkService.getShareBookMark(share));
   }
 }

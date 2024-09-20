@@ -1,12 +1,17 @@
 type Query {
     getBookMarks : [BookMarkDTO]
     getBookMark(bookMarkId: ID!) : BookMarkDTO
+    getNotes(bookMarkId: ID!) : [NoteDTO]
+    getNote(noteId: ID!) : NoteDTO
 }
 
 type Mutation {
     saveBookMark(isbn: String!) : String!
     likeBookMark(bookMarkId: ID!) : String!
     deleteBookMark(bookMarkId: ID!) : String!
+    saveNote(note: CreateNoteDTO!) : String!
+    updateNote(note: UpdateNoteDTO!) : String!
+    deleteNote(noteId: ID!) : String
 }
 
 type BookMarkDTO {
@@ -24,4 +29,23 @@ type BookMarkDTO {
     description: String,
     pubdate: String,
     likeCount: Int
+}
+
+input CreateNoteDTO {
+    bookMarkId: ID!,
+    title: String!,
+    content: String!
+}
+
+input UpdateNoteDTO {
+    noteId: ID!,
+    title: String,
+    content: String
+}
+
+type NoteDTO {
+    noteId: Int,
+    bookMarkId: Int,
+    title: String,
+    content: String
 }
