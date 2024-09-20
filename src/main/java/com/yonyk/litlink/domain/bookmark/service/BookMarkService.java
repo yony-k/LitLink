@@ -101,9 +101,9 @@ public class BookMarkService {
     // BookMark 엔티티 가져오기
     BookMark bookMark = findBookMark(memberId, bookMarkId);
     // ShareToken 생성
-    String shareToken = jwtProvider.getShareToken(bookMarkId);
+    String shareToken = jwtProvider.getShareToken(bookMark.getBookmarkId());
     // Redis에 ShareToken 저장
-    shareTokenRepository.save(new ShareToken(shareToken, bookMarkId));
+    shareTokenRepository.save(new ShareToken(shareToken, bookMark.getBookmarkId()));
     // 공유 링크 반환
     return baseUrl + shareToken;
   }

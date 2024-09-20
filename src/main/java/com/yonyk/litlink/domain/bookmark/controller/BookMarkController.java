@@ -5,7 +5,6 @@ import com.yonyk.litlink.domain.bookmark.service.BookMarkService;
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;

@@ -4,8 +4,6 @@ import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.member.entity.Member;
 import com.yonyk.litlink.global.common.book.entity.Book;
 import lombok.Builder;
-
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @Builder

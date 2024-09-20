@@ -2,9 +2,7 @@ package com.yonyk.litlink.domain.bookmark.graphql;
 
 import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.service.BookMarkService;
-import com.yonyk.litlink.global.error.CustomException;
 import com.yonyk.litlink.global.security.details.PrincipalDetails;
-import graphql.GraphQLException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
