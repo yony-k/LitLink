@@ -68,3 +68,6 @@ cookie:
 naver:
   client-id: ${CLIENT_ID}
   client-secret: ${CLIENT_SECRET}
+
+app:
+  share-url: ${BASE_URL:http://localhost:8080/api/bookmark?share=}

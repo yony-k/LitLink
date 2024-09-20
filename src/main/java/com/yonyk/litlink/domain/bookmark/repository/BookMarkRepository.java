@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
   List<BookMark> findByMemberMemberId(Long memberId);
-  Optional<BookMark> findByMemberMemberIdAndBookMarkId(Long memberId, Long bookMarkId);
+  Optional<BookMark> findByBookmarkIdAndMemberMemberId(Long bookMarkId, Long memberId);
 
 }

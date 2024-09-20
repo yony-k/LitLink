@@ -112,4 +112,15 @@ public class JwtProvider {
     // 인증객체 생성
     return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
   }
+
+  // 북마크 공유 용 JWT 생성
+  public String getShareToken(long bookMarkId) {
+    long now = (new Date()).getTime();
+    // 공유 용 토큰 생성
+    return Jwts.builder()
+                    .subject(String.valueOf(bookMarkId))
+                    .expiration(new Date(now + (600L * 1000L)))
+                    .signWith(key)
+                    .compact();
+  }
 }

@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -89,9 +90,11 @@ public class SpringSecurityConfig {
                                     .requestMatchers("/v3/**", "/swagger-ui/**")
                                     .permitAll()
                                     // 회원가입, 로그인, 액세스 토큰 재발급
-                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token", "/api/book", "/graphiql")
+                                    .requestMatchers("/oauth2/**", "/api/book", "/graphiql", "/api/members/refresh-token")
                                     .permitAll()
-                                    .requestMatchers("/api/members/**", "/api/bookmark/**", "/graphql")
+                                    .requestMatchers(HttpMethod.GET, "/api/bookmark/**").permitAll()
+                                    .requestMatchers(HttpMethod.POST, "/api/bookmark/**").authenticated()
+                                    .requestMatchers("/api/members/**", "/graphql")
                                     .authenticated()
                                     // 이외 모든 요청 인증 필요
                                     .anyRequest()
