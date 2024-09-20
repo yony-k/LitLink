@@ -27,7 +27,9 @@ public record OAuth2UserDTO(
   // 카카오일 경우
   private static OAuth2UserDTO ofKakao(
       String userNameAttributeName, Map<String, Object> oAuth2UserAttributes) {
+    @SuppressWarnings("unchecked")
     Map<String, Object> account = (Map<String, Object>) oAuth2UserAttributes.get("kakao_account");
+    @SuppressWarnings("unchecked")
     Map<String, Object> profile = (Map<String, Object>) account.get("profile");
     return OAuth2UserDTO.builder()
         .authId(oAuth2UserAttributes.get(userNameAttributeName).toString())

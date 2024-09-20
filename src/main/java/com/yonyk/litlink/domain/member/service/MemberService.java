@@ -31,9 +31,7 @@ public class MemberService {
     Optional<Member> member =
         memberRepository.findByAuthIdAndProvider(oAuth2UserDTO.authId(), oAuth2UserDTO.provider());
     // 존재한다면 DB의 Member 반환
-    if (member.isPresent()) {
-      return member.get();
-    }
+    if (member.isPresent()) return member.get();
     // 존재하지 않는다면 회원가입 후 Member 반환
     return memberRepository.save(oAuth2UserDTO.toEntity());
   }

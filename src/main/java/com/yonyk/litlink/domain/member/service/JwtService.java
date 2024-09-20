@@ -52,7 +52,7 @@ public class JwtService {
   // 리퀘스트에서 refreshToken 빼오기
   private Optional<Cookie> getCookie(HttpServletRequest request) {
     Optional<Cookie> findCookie = cookieProvider.getRefreshTokenCookie(request);
-    if (!findCookie.isPresent()) {
+    if (findCookie.isEmpty()) {
       log.error("JwtService 오류: " + SecurityExceptionType.COOKIE_NOT_FOUND.getMessage());
       throw new CustomException(SecurityExceptionType.COOKIE_NOT_FOUND);
     }
@@ -63,7 +63,7 @@ public class JwtService {
   private Optional<RefreshToken> getRefreshToken(Optional<Cookie> findCookie) {
     String refreshToken = findCookie.get().getValue();
     Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(refreshToken);
-    if (!findRefreshToken.isPresent()) {
+    if (findRefreshToken.isEmpty()) {
       log.error("JwtService 오류: " + SecurityExceptionType.REFRESHTOKEN_NOT_FOUND.getMessage());
       throw new CustomException(SecurityExceptionType.REFRESHTOKEN_NOT_FOUND);
     }
@@ -77,11 +77,9 @@ public class JwtService {
     long savedMemberId = Long.parseLong(memberId);
 
     // memberRepository 에서 사용자 정보 가져오기
-    Member findMember =
-        memberRepository
-            .findById(savedMemberId)
-            .orElseThrow(() -> new CustomException(SecurityExceptionType.MEMBER_NOT_FOUND));
-    return findMember;
+    return memberRepository
+        .findById(savedMemberId)
+        .orElseThrow(() -> new CustomException(SecurityExceptionType.MEMBER_NOT_FOUND));
   }
 
   // 토큰 재발급
