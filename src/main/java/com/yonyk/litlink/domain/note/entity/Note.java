@@ -28,5 +28,9 @@ public class Note extends BaseEntity {
   @JoinColumn(name = "bookmark_id")
   private BookMark bookmark;
 
+  @Column(nullable = false)
+  private String title;
+
+  @Column(columnDefinition = "TEXT", nullable = false)
   private String content;
 }
