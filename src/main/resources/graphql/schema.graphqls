@@ -7,7 +7,8 @@ type Mutation {
     saveBookMark(isbn: String!) : String!
     likeBookMark(bookMarkId: ID!) : String!
     deleteBookMark(bookMarkId: ID!) : String!
-    saveNote(bookMarkId: ID!, note: CreateNoteDTO!) : String!
+    saveNote(note: CreateNoteDTO!) : String!
+    updateNote(note: UpdateNoteDTO!) : String!
 }
 
 type BookMarkDTO {
@@ -28,8 +29,15 @@ type BookMarkDTO {
 }
 
 input CreateNoteDTO {
+    bookMarkId: ID!,
     title: String!,
     content: String!
+}
+
+input UpdateNoteDTO {
+    noteId: ID!,
+    title: String,
+    content: String
 }
 
 type NoteDTO {

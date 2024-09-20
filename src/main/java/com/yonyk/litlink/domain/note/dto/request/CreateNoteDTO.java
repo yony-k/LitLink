@@ -1,3 +1,3 @@
 package com.yonyk.litlink.domain.note.dto.request;
 
-public record CreateNoteDTO(String title, String content) {}
+public record CreateNoteDTO(long bookMarkId, String title, String content) {}
