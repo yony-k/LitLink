@@ -88,12 +88,6 @@ public class NoteService {
     return NoteDTO.toNoteDTO(note);
   }
 
-  // 북마크 공유기능으로 노트 목록 조회
-  public List<NoteDTO> getShareNotes(String share) {
-
-    return null;
-  }
-
   // 노트 존재 확인
   private Note findNote(long noteId) {
     // noteId 에 해당하는 Note 가 있는지 확인

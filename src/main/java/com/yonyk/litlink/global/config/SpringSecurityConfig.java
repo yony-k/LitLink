@@ -95,7 +95,7 @@ public class SpringSecurityConfig {
                     .requestMatchers(
                         "/oauth2/**", "/api/book", "/graphiql", "/api/members/refresh-token")
                     .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/bookmark/**")
+                    .requestMatchers(HttpMethod.GET, "/api/bookmark/**", "/api/note/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/bookmark/**")
                     .authenticated()

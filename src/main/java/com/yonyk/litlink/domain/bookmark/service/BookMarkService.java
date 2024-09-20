@@ -8,11 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
+import com.yonyk.litlink.domain.bookmark.dto.response.ShareBookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.bookmark.redis.ShareToken;
 import com.yonyk.litlink.domain.bookmark.redis.ShareTokenRepository;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.member.entity.Member;
+import com.yonyk.litlink.domain.note.dto.response.NoteDTO;
+import com.yonyk.litlink.domain.note.repository.NoteRepository;
 import com.yonyk.litlink.global.common.book.entity.Book;
 import com.yonyk.litlink.global.common.book.repository.BookRepository;
 import com.yonyk.litlink.global.common.book.service.BookAPIService;
@@ -33,6 +36,7 @@ public class BookMarkService {
   private final BookRepository bookRepository;
   private final ShareTokenRepository shareTokenRepository;
   private final JwtProvider jwtProvider;
+  private final NoteRepository noteRepository;
 
   @Value("${app.share-url}")
   String baseUrl;
@@ -108,7 +112,7 @@ public class BookMarkService {
   }
 
   // 북마크 공유 기능을 이용한 북마크 상세 조회
-  public BookMarkDTO getShareBookMark(String shareToken) {
+  public ShareBookMarkDTO getShareBookMark(String shareToken) {
     // Redis에서 ShareToken 찾아오기
     Optional<ShareToken> findToken = shareTokenRepository.findById(shareToken);
     // Redis에 없다면 예외 반환
@@ -116,8 +120,15 @@ public class BookMarkService {
     // Redis에 저장되어있던 bookMarkId로 BookMark 엔티티 가져오기
     Optional<BookMark> findBookMark = bookMarkRepository.findById(findToken.get().getBookMarkId());
     if (findBookMark.isEmpty()) throw new CustomException(BookMarkExceptionType.BOOKMARK_NOT_FOUND);
-    // BookMarkDTO 변환 후 반환
-    return BookMarkDTO.toBookMarkDTO(findBookMark.get());
+    // BookMark 엔티티 BookMarkDTO로 변환
+    BookMarkDTO bookMarkDTO = BookMarkDTO.toBookMarkDTO(findBookMark.get());
+    // BookMark에 연관되어있는 Note 목록 가져고 NoteDTO로 변환
+    List<NoteDTO> noteDTOS =
+        noteRepository.findByBookmarkBookmarkId(bookMarkDTO.bookMarkId()).stream()
+            .map(NoteDTO::toNoteDTO)
+            .toList();
+    // ShareBookMarkDTO 생성 후 반환
+    return new ShareBookMarkDTO(bookMarkDTO, noteDTOS);
   }
 
   // 북마크 존재 확인
