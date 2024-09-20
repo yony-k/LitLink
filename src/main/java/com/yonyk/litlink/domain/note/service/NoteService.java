@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
-import com.yonyk.litlink.domain.bookmark.redis.ShareTokenRepository;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.note.dto.request.CreateNoteDTO;
 import com.yonyk.litlink.domain.note.dto.request.UpdateNoteDTO;
@@ -28,7 +27,6 @@ public class NoteService {
 
   private final BookMarkRepository bookMarkRepository;
   private final NoteRepository noteRepository;
-  private final ShareTokenRepository shareTokenRepository;
 
   // 노트 생성
   public void saveNote(long memberId, CreateNoteDTO createNoteDTO) {
