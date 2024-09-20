@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum BookExceptionType implements ExceptionType {
+public enum BookMarkExceptionType implements ExceptionType {
   // 404 Not Found
-  BOOK_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 책입니다.");
+  BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "저장된 내역이 존재하지 않습니다."),
+  SHARETOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "공유 내역이 존재하지 않습니다.");
 
   private final HttpStatus status;
   private final String message;

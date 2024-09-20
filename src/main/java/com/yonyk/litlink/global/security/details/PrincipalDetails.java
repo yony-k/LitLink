@@ -1,15 +1,17 @@
 package com.yonyk.litlink.global.security.details;
 
-import com.yonyk.litlink.domain.member.entity.Member;
-import lombok.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import com.yonyk.litlink.domain.member.entity.Member;
+
+import lombok.*;
 
 @Builder
 @NoArgsConstructor

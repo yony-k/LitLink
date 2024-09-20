@@ -1,14 +1,17 @@
 package com.yonyk.litlink.domain.member.entity;
 
-import com.yonyk.litlink.domain.bookmark.entity.BookMark;
-import com.yonyk.litlink.domain.member.entity.enums.MemberRole;
-import com.yonyk.litlink.global.common.BaseEntity;
+import java.util.List;
+
 import jakarta.persistence.*;
-import lombok.*;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.util.List;
+import com.yonyk.litlink.domain.bookmark.entity.BookMark;
+import com.yonyk.litlink.domain.member.entity.enums.MemberRole;
+import com.yonyk.litlink.global.common.BaseEntity;
+
+import lombok.*;
 
 @Builder
 @Getter
@@ -28,7 +31,7 @@ public class Member extends BaseEntity {
 
   @Column(nullable = false)
   private String memberName;
-  
+
   @Column(nullable = false)
   private String email;
 

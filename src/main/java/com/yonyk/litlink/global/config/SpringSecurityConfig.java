@@ -1,16 +1,11 @@
 package com.yonyk.litlink.global.config;
 
-import com.yonyk.litlink.global.security.filter.JwtAuthorizationFilter;
-import com.yonyk.litlink.global.security.handler.CustomAccessDeniedHandler;
-import com.yonyk.litlink.global.security.handler.CustomAuthenticationEntryPoint;
-import com.yonyk.litlink.global.security.handler.CustomLogoutHandler;
-import com.yonyk.litlink.global.security.handler.OAuth2SuccessHandler;
-import com.yonyk.litlink.global.security.service.CustomOAuth2UserService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -20,7 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collections;
+import com.yonyk.litlink.global.security.filter.JwtAuthorizationFilter;
+import com.yonyk.litlink.global.security.handler.CustomAccessDeniedHandler;
+import com.yonyk.litlink.global.security.handler.CustomAuthenticationEntryPoint;
+import com.yonyk.litlink.global.security.handler.CustomLogoutHandler;
+import com.yonyk.litlink.global.security.handler.OAuth2SuccessHandler;
+import com.yonyk.litlink.global.security.service.CustomOAuth2UserService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
@@ -32,7 +35,7 @@ public class SpringSecurityConfig {
   @Value("${jwt.access-token-header}")
   public String accessTokenHeader;
 
-  // OAuth2 로그인 처리 서비스 
+  // OAuth2 로그인 처리 서비스
   private final CustomOAuth2UserService customOAuth2UserService;
   // OAuth2 로그인 성공 처리 핸들러
   private final OAuth2SuccessHandler customOAuth2SuccessHandler;
@@ -74,43 +77,47 @@ public class SpringSecurityConfig {
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.sessionManagement(
-                    session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            // 사용자가 의도하지 않은 요청 방지 설정
-            .csrf(csrfConf -> csrfConf.disable())
-            // 위에서 적은 Cors 설정 적용
-            .cors(c -> c.configurationSource(corsConfigurationSource()))
-            // 기본 폼 로그인 기능 비활성화
-            .formLogin(loginConf -> loginConf.disable())
-            // 특정 경로에 대한 인가 설정
-            .authorizeHttpRequests(
-                    auth ->
-                            auth
-                                    // Swagger 설정
-                                    .requestMatchers("/v3/**", "/swagger-ui/**")
-                                    .permitAll()
-                                    // 회원가입, 로그인, 액세스 토큰 재발급
-                                    .requestMatchers("/oauth2/**", "/api/members/refresh-token", "/api/book", "/graphiql")
-                                    .permitAll()
-                                    .requestMatchers("/api/members/**", "/api/bookmark/**", "/graphql")
-                                    .authenticated()
-                                    // 이외 모든 요청 인증 필요
-                                    .anyRequest()
-                                    .authenticated())
-            .oauth2Login(oAuth2 ->
-                    oAuth2.userInfoEndpoint(c -> c.userService(customOAuth2UserService))
-                            .successHandler(customOAuth2SuccessHandler))
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        // 사용자가 의도하지 않은 요청 방지 설정
+        .csrf(csrfConf -> csrfConf.disable())
+        // 위에서 적은 Cors 설정 적용
+        .cors(c -> c.configurationSource(corsConfigurationSource()))
+        // 기본 폼 로그인 기능 비활성화
+        .formLogin(loginConf -> loginConf.disable())
+        // 특정 경로에 대한 인가 설정
+        .authorizeHttpRequests(
+            auth ->
+                auth
+                    // Swagger 설정
+                    .requestMatchers("/v3/**", "/swagger-ui/**")
+                    .permitAll()
+                    // 회원가입, 로그인, 액세스 토큰 재발급
+                    .requestMatchers(
+                        "/oauth2/**", "/api/book", "/graphiql", "/api/members/refresh-token")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/bookmark/**")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/bookmark/**")
+                    .authenticated()
+                    .requestMatchers("/api/members/**", "/graphql")
+                    .authenticated()
+                    // 이외 모든 요청 인증 필요
+                    .anyRequest()
+                    .authenticated())
+        .oauth2Login(
+            oAuth2 ->
+                oAuth2
+                    .userInfoEndpoint(c -> c.userService(customOAuth2UserService))
+                    .successHandler(customOAuth2SuccessHandler))
 
-            // 예외 처리 핸들러 설정
-            .exceptionHandling(
-                    exceptionHandling -> exceptionHandling
-                            .authenticationEntryPoint(customAuthenticationEntryPoint)
-                            .accessDeniedHandler(customAccessDeniedHandler))
-            // 로그아웃 처리
-            .logout(
-                    logout ->
-                            logout
-                                    .logoutUrl("/api/logout")
-                                    .addLogoutHandler(customLogoutHandler));
+        // 예외 처리 핸들러 설정
+        .exceptionHandling(
+            exceptionHandling ->
+                exceptionHandling
+                    .authenticationEntryPoint(customAuthenticationEntryPoint)
+                    .accessDeniedHandler(customAccessDeniedHandler))
+        // 로그아웃 처리
+        .logout(logout -> logout.logoutUrl("/api/logout").addLogoutHandler(customLogoutHandler));
     // 커스텀 필터 설정
     http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -1,12 +1,16 @@
 package com.yonyk.litlink.global.security.handler;
-import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+
+import java.io.IOException;
+
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -62,7 +66,7 @@ public class SecurityResponseHandler {
 
   // 클라이언트에게 응답 보내기
   public void sendResponse(String message, HttpStatus httpStatus, HttpServletResponse response)
-          throws IOException {
+      throws IOException {
     response.setContentType(MediaType.TEXT_PLAIN_VALUE);
     response.setCharacterEncoding("UTF-8");
     response.setStatus(httpStatus.value());

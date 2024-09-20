@@ -1,17 +1,20 @@
 package com.yonyk.litlink.global.security.handler;
 
-import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+import java.io.IOException;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import com.yonyk.litlink.global.error.exceptionType.SecurityExceptionType;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +24,11 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
   private final SecurityResponseHandler securityResponseHandler;
 
   @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+  public void commence(
+      HttpServletRequest request,
+      HttpServletResponse response,
+      AuthenticationException authException)
+      throws IOException, ServletException {
     // 예외 종류 확인
     Exception e = (Exception) request.getAttribute("exception");
     String message = "";

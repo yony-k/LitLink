@@ -1,4 +1,4 @@
-package com.yonyk.litlink.global.security.redis;
+package com.yonyk.litlink.domain.bookmark.redis;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
@@ -11,8 +11,8 @@ import lombok.*;
 @Getter
 @EqualsAndHashCode
 @ToString
-@RedisHash(value = "RefreshToken", timeToLive = 259200)
-public class RefreshToken {
-  @Id String refreshToken;
-  String memberId;
+@RedisHash(value = "ShareToken", timeToLive = 600)
+public class ShareToken {
+  @Id String shareToken;
+  long bookMarkId;
 }

@@ -1,9 +1,10 @@
 package com.yonyk.litlink.global.error.exceptionType;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -12,7 +13,7 @@ public enum SecurityExceptionType implements ExceptionType {
   // JwtAuthenticationFilter(로그인 시 사용되는 인증필터) 오류
   INVALID_JSON_REQUEST(HttpStatus.UNAUTHORIZED, "요청 형식을 다시 확인해 주세요."),
   IO_ERROR_PROCESSING_REQUEST(
-          HttpStatus.UNAUTHORIZED, "서버에서 요청을 처리하는 도중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
+      HttpStatus.UNAUTHORIZED, "서버에서 요청을 처리하는 도중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
   INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "아이디와 비밀번호를 확인해 주세요."),
   SERVER_ERROR(HttpStatus.UNAUTHORIZED, "서버에서 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."),
 

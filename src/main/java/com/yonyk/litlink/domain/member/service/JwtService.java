@@ -1,5 +1,13 @@
 package com.yonyk.litlink.domain.member.service;
 
+import java.util.Optional;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Service;
+
 import com.yonyk.litlink.domain.member.entity.Member;
 import com.yonyk.litlink.domain.member.repository.MemberRepository;
 import com.yonyk.litlink.global.error.CustomException;
@@ -9,15 +17,9 @@ import com.yonyk.litlink.global.security.redis.RefreshToken;
 import com.yonyk.litlink.global.security.redis.RefreshTokenRepository;
 import com.yonyk.litlink.global.security.util.CookieProvider;
 import com.yonyk.litlink.global.security.util.JwtProvider;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -50,7 +52,7 @@ public class JwtService {
   // 리퀘스트에서 refreshToken 빼오기
   private Optional<Cookie> getCookie(HttpServletRequest request) {
     Optional<Cookie> findCookie = cookieProvider.getRefreshTokenCookie(request);
-    if (!findCookie.isPresent()) {
+    if (findCookie.isEmpty()) {
       log.error("JwtService 오류: " + SecurityExceptionType.COOKIE_NOT_FOUND.getMessage());
       throw new CustomException(SecurityExceptionType.COOKIE_NOT_FOUND);
     }
@@ -61,7 +63,7 @@ public class JwtService {
   private Optional<RefreshToken> getRefreshToken(Optional<Cookie> findCookie) {
     String refreshToken = findCookie.get().getValue();
     Optional<RefreshToken> findRefreshToken = refreshTokenRepository.findById(refreshToken);
-    if (!findRefreshToken.isPresent()) {
+    if (findRefreshToken.isEmpty()) {
       log.error("JwtService 오류: " + SecurityExceptionType.REFRESHTOKEN_NOT_FOUND.getMessage());
       throw new CustomException(SecurityExceptionType.REFRESHTOKEN_NOT_FOUND);
     }
@@ -75,17 +77,16 @@ public class JwtService {
     long savedMemberId = Long.parseLong(memberId);
 
     // memberRepository 에서 사용자 정보 가져오기
-    Member findMember =
-        memberRepository
-            .findById(savedMemberId)
-            .orElseThrow(() -> new CustomException(SecurityExceptionType.MEMBER_NOT_FOUND));
-    return findMember;
+    return memberRepository
+        .findById(savedMemberId)
+        .orElseThrow(() -> new CustomException(SecurityExceptionType.MEMBER_NOT_FOUND));
   }
 
   // 토큰 재발급
   private void reissueToken(Member findMember, HttpServletResponse response) {
     // 사용자 정보로 리프레시 토큰, 엑세스 토큰 다시 만들기
-    JwtDTO reissueToken = jwtProvider.generateJwt(findMember.getMemberRole().getRole(), findMember.getMemberId());
+    JwtDTO reissueToken =
+        jwtProvider.generateJwt(findMember.getMemberRole().getRole(), findMember.getMemberId());
     // accessToken은 헤더에 저장
     response.setHeader(
         jwtProvider.accessTokenHeader, jwtProvider.prefix + reissueToken.accessToken());
