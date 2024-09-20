@@ -1,5 +1,6 @@
 package com.yonyk.litlink.domain.note.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.note.dto.request.CreateNoteDTO;
 import com.yonyk.litlink.domain.note.dto.request.UpdateNoteDTO;
+import com.yonyk.litlink.domain.note.dto.response.NoteDTO;
 import com.yonyk.litlink.domain.note.entity.Note;
 import com.yonyk.litlink.domain.note.repository.NoteRepository;
 import com.yonyk.litlink.global.error.CustomException;
@@ -60,6 +62,14 @@ public class NoteService {
     checkAuthor(memberId, noteId);
     // 노트 삭제
     noteRepository.deleteById(noteId);
+  }
+
+  // 노트 목록 조회
+  public List<NoteDTO> getNotes(long bookmarkId) {
+    // bookmarkId 기준으로 조회 후 NoteDTO 로 변환하여 반환
+    return noteRepository.findByBookmarkBookmarkId(bookmarkId).stream()
+        .map(NoteDTO::toNoteDTO)
+        .toList();
   }
 
   // 노트 존재 확인
