@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
+import com.yonyk.litlink.domain.bookmark.redis.ShareTokenRepository;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.note.dto.request.CreateNoteDTO;
 import com.yonyk.litlink.domain.note.dto.request.UpdateNoteDTO;
@@ -27,6 +28,7 @@ public class NoteService {
 
   private final BookMarkRepository bookMarkRepository;
   private final NoteRepository noteRepository;
+  private final ShareTokenRepository shareTokenRepository;
 
   // 노트 생성
   public void saveNote(long memberId, CreateNoteDTO createNoteDTO) {
@@ -65,11 +67,31 @@ public class NoteService {
   }
 
   // 노트 목록 조회
-  public List<NoteDTO> getNotes(long bookmarkId) {
+  public List<NoteDTO> getNotes(long memberId, long bookmarkId) {
+    // 노트 소유주 확인
+    boolean authorCheck =
+        bookMarkRepository.existsByMemberMemberIdAndBookmarkId(memberId, bookmarkId);
+    if (!authorCheck) throw new CustomException(NoteExceptionType.NOTE_NOT_FOUND);
     // bookmarkId 기준으로 조회 후 NoteDTO 로 변환하여 반환
     return noteRepository.findByBookmarkBookmarkId(bookmarkId).stream()
         .map(NoteDTO::toNoteDTO)
         .toList();
+  }
+
+  // 노트 상세 조회
+  public NoteDTO getNote(long memberId, long noteId) {
+    // 노트 가져오기
+    Note note = findNote(noteId);
+    // 노트 소유주 확인
+    checkAuthor(memberId, noteId);
+    // 노트 반환
+    return NoteDTO.toNoteDTO(note);
+  }
+
+  // 북마크 공유기능으로 노트 목록 조회
+  public List<NoteDTO> getShareNotes(String share) {
+
+    return null;
   }
 
   // 노트 존재 확인

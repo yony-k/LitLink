@@ -52,6 +52,13 @@ public class NoteGraphqlController {
   @QueryMapping
   public List<NoteDTO> getNotes(
       @AuthenticationPrincipal PrincipalDetails principalDetails, @Argument long bookMarkId) {
-    return noteService.getNotes(bookMarkId);
+    return noteService.getNotes(principalDetails.getMember().getMemberId(), bookMarkId);
+  }
+
+  // 노트 상세 조회
+  @QueryMapping
+  public NoteDTO getNote(
+      @AuthenticationPrincipal PrincipalDetails principalDetails, @Argument long noteId) {
+    return noteService.getNote(principalDetails.getMember().getMemberId(), noteId);
   }
 }

@@ -2,6 +2,7 @@ type Query {
     getBookMarks : [BookMarkDTO]
     getBookMark(bookMarkId: ID!) : BookMarkDTO
     getNotes(bookMarkId: ID!) : [NoteDTO]
+    getNote(noteId: ID!) : NoteDTO
 }
 
 type Mutation {
