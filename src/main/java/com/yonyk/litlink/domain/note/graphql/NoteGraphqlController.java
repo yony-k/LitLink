@@ -35,4 +35,12 @@ public class NoteGraphqlController {
     noteService.updateNote(principalDetails.getMember().getMemberId(), note);
     return "노트 수정이 성공적으로 완료되었습니다.";
   }
+
+  // 노트 삭제
+  @MutationMapping
+  public String deleteNote(
+      @AuthenticationPrincipal PrincipalDetails principalDetails, @Argument long noteId) {
+    noteService.deleteNote(principalDetails.getMember().getMemberId(), noteId);
+    return "노트 삭제가 성공적으로 완료되었습니다.";
+  }
 }

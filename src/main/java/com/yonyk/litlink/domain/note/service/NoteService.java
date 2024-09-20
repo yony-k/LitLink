@@ -53,6 +53,15 @@ public class NoteService {
     noteRepository.save(note);
   }
 
+  // 노트 삭제
+  @Transactional
+  public void deleteNote(long memberId, long noteId) {
+    // 노트 소유주 확인 및 존재 확인
+    checkAuthor(memberId, noteId);
+    // 노트 삭제
+    noteRepository.deleteById(noteId);
+  }
+
   // 노트 존재 확인
   private Note findNote(long noteId) {
     // noteId 에 해당하는 Note 가 있는지 확인

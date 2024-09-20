@@ -9,6 +9,7 @@ type Mutation {
     deleteBookMark(bookMarkId: ID!) : String!
     saveNote(note: CreateNoteDTO!) : String!
     updateNote(note: UpdateNoteDTO!) : String!
+    deleteNote(noteId: ID!) : String
 }
 
 type BookMarkDTO {
