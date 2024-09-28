@@ -9,15 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.yonyk.litlink.domain.bookmark.dto.response.BookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.dto.response.ShareBookMarkDTO;
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
-import com.yonyk.litlink.domain.bookmark.redis.ShareTokenRepository;
 import com.yonyk.litlink.domain.bookmark.repository.BookMarkRepository;
 import com.yonyk.litlink.domain.member.entity.Member;
-import com.yonyk.litlink.domain.note.repository.NoteRepository;
 import com.yonyk.litlink.global.common.book.entity.Book;
 import com.yonyk.litlink.global.common.book.service.BookService;
 import com.yonyk.litlink.global.error.CustomException;
 import com.yonyk.litlink.global.error.exceptionType.BookMarkExceptionType;
-import com.yonyk.litlink.global.security.util.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +30,7 @@ public class BookMarkService {
   private final BookMarkLikeService bookMarkLikeService;
   private final BookMarkShareService bookMarkShareService;
 
-  private final ShareTokenRepository shareTokenRepository;
-  private final JwtProvider jwtProvider;
-  private final NoteRepository noteRepository;
-
-  // 책 저장
+  // 북마크 저장
   @Transactional
   public void saveBookMark(Member member, String isbn) {
     // 책 정보 가져오기

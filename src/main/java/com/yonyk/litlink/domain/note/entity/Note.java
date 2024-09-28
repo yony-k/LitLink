@@ -25,7 +25,7 @@ public class Note extends BaseEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long noteId;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "bookmark_id")
   private BookMark bookmark;
 

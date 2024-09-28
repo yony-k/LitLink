@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
 
   datasource:
@@ -13,6 +16,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_batch_fetch_size: 10
 
   data:
     redis:
