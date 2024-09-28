@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 
@@ -13,7 +14,8 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
   List<BookMark> findByMemberMemberId(Long memberId);
 
   // 북마크 상세 조회
-  Optional<BookMark> findByBookmarkIdAndMemberMemberId(Long bookMarkId, Long memberId);
+  Optional<BookMark> findByBookmarkIdAndMemberMemberId(
+      @Param("bookMarkId") Long bookMarkId, @Param("memberId") Long memberId);
 
   // 북마크 존재 확인
   boolean existsByMemberMemberIdAndBookmarkId(Long memberId, Long bookMarkId);
