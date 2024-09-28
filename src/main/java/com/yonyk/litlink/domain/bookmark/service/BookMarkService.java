@@ -33,6 +33,9 @@ public class BookMarkService {
   // 북마크 저장
   @Transactional
   public void saveBookMark(Member member, String isbn) {
+    // 북마크 중복 확인
+    boolean isExist = bookMarkRepository.existsByBookIsbn(isbn);
+    if (!isExist) throw new CustomException(BookMarkExceptionType.BOOKMARK_ALREADY_SAVED);
     // 책 정보 가져오기
     Book book = bookService.getOrSaveBook(isbn);
     // BookMark 엔티티 생성
