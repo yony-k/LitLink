@@ -21,7 +21,7 @@ public class BookMarkController {
 
   // 북마크 공유 기능
   @PostMapping
-  public ResponseEntity<String> saveBookMark(
+  public ResponseEntity<String> shareBookMark(
       @AuthenticationPrincipal PrincipalDetails principalDetails,
       @RequestParam("bookMarkId") long bookMarkId) {
     return ResponseEntity.ok(

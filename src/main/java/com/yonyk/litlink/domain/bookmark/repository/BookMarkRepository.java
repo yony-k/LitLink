@@ -16,5 +16,5 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
   Optional<BookMark> findByBookmarkIdAndMemberMemberId(Long bookMarkId, Long memberId);
 
   // 북마크 존재 확인
-  boolean existsByBookIsbn(String isbn);
+  boolean existsByMemberMemberIdAndBookIsbn(Long memberId, String isbn);
 }
