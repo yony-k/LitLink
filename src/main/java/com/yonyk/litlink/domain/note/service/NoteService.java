@@ -41,16 +41,6 @@ public class NoteService {
     noteRepository.save(note);
   }
 
-  // 노트 상세 조회
-  public NoteDTO getNote(long memberId, long noteId) {
-    // 노트 소유주 확인
-    checkAuthor(memberId, noteId);
-    // 노트 가져오기
-    Note note = findNote(noteId);
-    // 노트 반환
-    return NoteDTO.toNoteDTO(note);
-  }
-
   // 노트 목록 조회
   public List<NoteDTO> getNotes(long memberId, long bookmarkId) {
     // 노트 소유주 확인
@@ -62,6 +52,16 @@ public class NoteService {
     return noteRepository.findByBookmarkBookmarkId(bookmarkId).stream()
         .map(NoteDTO::toNoteDTO)
         .toList();
+  }
+
+  // 노트 상세 조회
+  public NoteDTO getNote(long memberId, long noteId) {
+    // 노트 소유주 확인
+    checkAuthor(memberId, noteId);
+    // 노트 가져오기
+    Note note = findNote(noteId);
+    // 노트 반환
+    return NoteDTO.toNoteDTO(note);
   }
 
   // 노트 수정
@@ -82,8 +82,10 @@ public class NoteService {
   public void deleteNote(long memberId, long noteId) {
     // 노트 소유주 확인 및 존재 확인
     checkAuthor(memberId, noteId);
+    // 노트 가져오기
+    Note note = findNote(noteId);
     // 노트 삭제
-    noteRepository.deleteById(noteId);
+    noteRepository.delete(note);
   }
 
   // 노트 존재 확인
