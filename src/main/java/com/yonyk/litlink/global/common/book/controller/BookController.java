@@ -1,4 +1,4 @@
-package com.yonyk.litlink.domain.book.controller;
+package com.yonyk.litlink.global.common.book.controller;
 
 import java.util.List;
 

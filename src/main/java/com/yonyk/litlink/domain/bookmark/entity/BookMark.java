@@ -1,14 +1,11 @@
 package com.yonyk.litlink.domain.bookmark.entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import com.yonyk.litlink.domain.member.entity.Member;
-import com.yonyk.litlink.domain.note.entity.Note;
 import com.yonyk.litlink.global.common.BaseEntity;
 import com.yonyk.litlink.global.common.book.entity.Book;
 
@@ -37,9 +34,6 @@ public class BookMark extends BaseEntity {
   private Book book;
 
   @Builder.Default private boolean liked = false;
-
-  @OneToMany(mappedBy = "bookmark", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<Note> notes;
 
   public void like() {
     this.liked = true;

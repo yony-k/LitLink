@@ -28,11 +28,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+    // 리퀘스트에서 accessToken 가져오기
     String accessToken = request.getHeader(jwtProvider.accessTokenHeader);
 
+    // accessToken이 없는 경우 필터 통과
     if (accessToken == null) {
       filterChain.doFilter(request, response);
     } else {
+      // accessToken 형식 검사
       if (StringUtils.hasText(accessToken) || accessToken.startsWith("Bearer ")) {
         try {
           // accessToken을 사용해서 인증객체 등록

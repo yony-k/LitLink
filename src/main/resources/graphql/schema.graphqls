@@ -1,16 +1,26 @@
 type Query {
+    ## 북마크 목록
     getBookMarks : [BookMarkDTO]
+    ## 북마크 상세
     getBookMark(bookMarkId: ID!) : BookMarkDTO
+    ## 노트 목록
     getNotes(bookMarkId: ID!) : [NoteDTO]
+    ## 노트 상세
     getNote(noteId: ID!) : NoteDTO
 }
 
 type Mutation {
+    ## 북마크 저장
     saveBookMark(isbn: String!) : String!
+    ## 북마크 좋아요
     likeBookMark(bookMarkId: ID!) : String!
+    ## 북마크 삭제
     deleteBookMark(bookMarkId: ID!) : String!
+    ## 노트 저장
     saveNote(note: CreateNoteDTO!) : String!
+    ## 노트 수정
     updateNote(note: UpdateNoteDTO!) : String!
+    ## 노트 삭제
     deleteNote(noteId: ID!) : String
 }
 
