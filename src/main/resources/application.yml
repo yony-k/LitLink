@@ -72,3 +72,7 @@ naver:
 
 app:
   share-url: ${BASE_URL:http://localhost:8080/api/bookmark?share=}
+
+logging:
+  level:
+    org.springframework.security: DEBUG
