@@ -177,26 +177,28 @@ LitLink는 좋아하는 책을 저장하고, 감상을 작성하여 다른 사�
 
 ## 3. 기술 문서
 
+[API 명세서 자세히 보기](https://www.notion.so/LitLink-API-538e22f4109d4427bb16ee253e2e70c6)
+
 ### 📄 API 명세서
 
 | API 명칭 | HTTP 메서드 | 엔드포인트 | 설명 |
 | --- | --- | --- | --- |
-| **책 검색** | GET | `/api/book` | 책 검색 후 목록을 받아볼 수 있습니다. |
-| **회원탈퇴** | POST | `/api/members` | 회원탈퇴를 합니다. |
-| **refreshToken 재발급** | DELETE | `/api/members` | refreshToken을 재발급합니다. |
-| **책 공유 기능으로 조회** | GET | `/api/bookmark` | 책 공유 기능을 통해 책 정보 및 노트를 조회합니다. |
-| **책 공유** | POST | `/api/bookmark` | 북마크를 공유합니다. |
-| **refreshToken 재발급** | DELETE | `/api/members` | refreshToken을 재발급합니다. |
-| **saveBookMark** | POST | `/graphql` | 책 정보를 저장합니다. |
-| **likeBookMark** | POST | `/graphql` | 북마크에 좋아요를 표시합니다. |
-| **deleteBookMark** | POST | `/graphql` | 특정 북마크를 삭제합니다. |
-| **getBookMarks** | POST | `/graphql` | 사용자의 모든 북마크를 조회합니다. |
-| **getBookMark** | POST | `/graphql` | 특정 북마크를 조회합니다. |
-| **saveNote** | POST | `/graphql` | 노트를 생서합니다. |
-| **updateNote** | POST | `/graphql` | 노트를 수정합니다. |
-| **deleteNote** | POST | `/graphql` | 노트를 삭제합니다. |
-| **getNotes** | POST | `/graphql` | 특정 북마크에 속한 모든 노트를 조회합니다. |
-| **getNote** | POST | `/graphql` | 특정 노트를 조회합니다. |
+| **로그인/회원가입** | GET | /oauth2/authorization/kakao | 로그인 및 회원가입을 합니다. |
+| **회원탈퇴** | POST | /api/members | 회원탈퇴를 합니다. |
+| **refreshToken 재발급** | DELETE | /api/members/refresh-token | refreshToken을 재발급합니다. |
+| **책 검색** | GET | /api/book | 책 검색 후 목록을 받아볼 수 있습니다. |
+| **북마크 공유** | POST | /api/bookmark | 북마크를 공유합니다. |
+| **북마크 공유 기능으로 조회** | GET | /api/bookmark | 책 공유 기능을 통해 책 정보 및 노트를 조회합니다. |
+| **북마크 저장** | POST | /graphql | 책 정보를 저장합니다. |
+| **북마크 목록 조회** | POST | /graphql | 사용자의 모든 북마크를 조회합니다. |
+| **북마크 상세 조회** | POST | /graphql | 특정 북마크를 조회합니다. |
+| **북마크 삭제** | POST | /graphql | 특정 북마크를 삭제합니다. |
+| **북마크 좋아요** | POST | /graphql | 북마크에 좋아요를 표시합니다. |
+| **노트 생성** | POST | /graphql | 노트를 생성합니다. |
+| **노트 목록 조회** | POST | /graphql | 특정 북마크에 속한 모든 노트를 조회합니다. |
+| **노트 상세 조회** | POST | /graphql | 특정 노트를 조회합니다. |
+| **노트 수정** | POST | /graphql | 노트를 수정합니다. |
+| **노트 삭제** | POST | /graphql | 노트를 삭제합니다. |
 
 
 <details>
@@ -462,6 +464,32 @@ D:.
     <summary>구현 코드</summary>
     <div>
         <a href="https://github.com/yony-k/LitLink/tree/dev/src/main/java/com/yonyk/litlink/domain/note" target="_blank">Note 패키지</a></br>
+    </div>
+</details>
+
+---
+
+### ⭐ 배포
+
+- Github Actiton을 사용한 CI/CD 자동화
+- Docker를 이용한 Build
+- AWS EC2 서버 배포
+
+<details>
+    <summary>구현 의도</summary>
+    <div>
+        <div><strong>Github Actiton</strong></div>
+        <div>프로젝트에 수정사항이 생길 때마다 직접 파일을 만들어 배포하는 방식은 비효율적이라는 생각이 들어 CI/CD 과정을 자동화하고자 했습니다. CI/CD에 사용되는 툴 중 비교적 사용방법이 간단한 Github Actiton을 선택했습니다.</div></br>
+        <strong>Docker</strong></div>
+        <div>운영체제에 구애받지 않고 어플리케이션을 실행시킬 수 있도록 Docker를 사용하였습니다.</div></br>
+        <strong>AWS EC2 서버</strong></div>
+        <div>AWS는 현재까지도 클라우드 이용 비중 순위에서 상위권에 위치해있기 때문에 실무에서 반드시 한번은 다뤄볼 일이 생길 것 같아 AWS를 선택했습니다.</div></br>
+    </div>
+</details>
+<details>
+    <summary>구현 코드</summary>
+    <div>
+        <a href="https://github.com/yony-k/LitLink/blob/dev/.github/workflows/deploy.yml" target="_blank">배포 워크플로우</a></br>
     </div>
 </details>
 
