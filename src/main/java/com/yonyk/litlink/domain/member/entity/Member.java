@@ -1,13 +1,10 @@
 package com.yonyk.litlink.domain.member.entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import com.yonyk.litlink.domain.bookmark.entity.BookMark;
 import com.yonyk.litlink.domain.member.entity.enums.MemberRole;
 import com.yonyk.litlink.global.common.BaseEntity;
 
@@ -44,7 +41,4 @@ public class Member extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
   private MemberRole memberRole;
-
-  @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private List<BookMark> bookMarks;
 }
